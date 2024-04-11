@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import LiveCursors from "./cursor/LiveCursors";
-import { useMyPresence, useOthers } from "@/liveblocks.config";
+import { useBroadcastEvent, useMyPresence, useOthers } from "@/liveblocks.config";
 import CursorChat from "./cursor/CursorChat";
-import { CursorMode, CursorState, Reaction } from "@/types/type";
+import { CursorMode, CursorState, Reaction, ReactionEvent } from "@/types/type";
 import ReactionSelector from "./reaction/ReactionButton";
+import FlyingReaction from "./reaction/FlyingReaction";
+import useInterval from "@/hooks/useInterval";
+import { useEventListener } from "@/public/liveblocks.config";
 
 const Live = () => {
   const others = useOthers();
@@ -14,6 +17,42 @@ const Live = () => {
   })
 
   const [reaction, setReaction] = useState<Reaction[]>([])
+
+  const broadcast = useBroadcastEvent();
+
+  //remove the reactions that are not visible anymore so that state will not store all of them and app/web will work with efficiency 
+  useInterval(() => {
+    setReaction((reaction) => reaction.filter((r) => r.timestamp > Date.now()- 4000))
+  }, 1000)
+
+  useInterval(() => {
+    if(cursorState.mode === CursorMode.Reaction && cursorState.isPressed && cursor) {
+      setReaction ((reactions) => reactions.concat([
+        {
+          point: {x: cursor.x, y: cursor.y},
+          value: cursorState.reaction,
+          timestamp : Date.now(),
+        }
+      ]))
+      broadcast({
+        x: cursor.x,
+        y: cursor.y,
+        value: cursorState.reaction,
+      })
+    }
+  }, 70)
+
+  useEventListener((eventData)=> {
+    const event = eventData.event as ReactionEvent; 
+    
+    setReaction ((reactions) => reactions.concat([
+      {
+        point: {x: event.x, y: event.y},
+        value: event.value,
+        timestamp : Date.now(),
+      }
+    ]))
+  })
 
   const handlePointerMove = useCallback((event: React.PointerEvent) => {
     event.preventDefault();
@@ -101,6 +140,16 @@ const Live = () => {
       className="h-[100vh] w-full flex justify-center items-center text-center"
     >
       <h1>Live Page</h1>
+
+      {reaction.map((r) =>(
+        <FlyingReaction 
+        key = {r.timestamp.toString()}
+        x = {r.point.x}
+        y = {r.point.y}
+        timestamp = {r.timestamp}
+        value = {r.value}
+        />
+      ))}
 
       {cursor && (
         <CursorChat 
