@@ -1,13 +1,15 @@
 "use client";
 
 import Live from "@/components/Live";
+import Navbar from "@/components/Navbar";
 
 export default function Page() {
   return ( 
-    <div>
-      <h1 className="text-xl bg-black text-white">REACT</h1>
+    <main className="h-screen overflow-hidden">
+      <Navbar />
+      <section className="flex h-full flex-row"></section>
       <Live />
-    </div>
+    </main>
     
   );
 }
