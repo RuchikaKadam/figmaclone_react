@@ -5,6 +5,20 @@ import { ReactionEvent } from "./types/type";
 const client = createClient ( {
   throttle: 16,
   publicApiKey: process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY!,
+
+  async resolveUsers({ userIds }) {
+    // Used only for Comments. Return a list of user information retrieved
+    // from `userIds`. This info is used in comments, mentions etc.
+
+    // const usersData = await __fetchUsersFromDB__(userIds);
+    //
+    // return usersData.map((userData) => ({
+    //   name: userData.name,
+    //   avatar: userData.avatar.src,
+    // }));
+
+    return [];
+  },
 });
 
 // Presence represents the properties that exist on every user in the Room
@@ -84,19 +98,4 @@ export const {
     useAddReaction,
     useRemoveReaction,
   },
-} = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(client, {
-  async resolveUsers({ userIds }) {
-    // Used only for Comments. Return a list of user information retrieved
-    // from `userIds`. This info is used in comments, mentions etc.
-
-    // const usersData = await __fetchUsersFromDB__(userIds);
-    //
-    // return usersData.map((userData) => ({
-    //   name: userData.name,
-    //   avatar: userData.avatar.src,
-    // }));
-
-    return [];
-  },
-
-});
+} = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(client);
