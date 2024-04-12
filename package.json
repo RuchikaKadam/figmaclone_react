@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@liveblocks/client": "^1.11.0",
+    "@liveblocks/client": "^1.11.1",
     "@liveblocks/react": "^1.11.0",
     "@liveblocks/react-comments": "^1.11.1",
     "@radix-ui/react-context-menu": "^2.1.5",

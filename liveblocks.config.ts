@@ -2,7 +2,7 @@ import { LiveMap, createClient } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
 import { ReactionEvent } from "./types/type";
 
-const client = createClient({
+const client = createClient ( {
   throttle: 16,
   publicApiKey: process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY!,
 });
@@ -98,27 +98,5 @@ export const {
 
     return [];
   },
-  async resolveMentionSuggestions({ text, roomId }) {
-    // Used only for Comments. Return a list of userIds that match `text`.
-    // These userIds are used to create a mention list when typing in the
-    // composer.
-    //
-    // For example when you type "@jo", `text` will be `"jo"`, and
-    // you should to return an array with John and Joanna's userIds:
-    // ["john@example.com", "joanna@example.com"]
 
-    // const userIds = await __fetchAllUserIdsFromDB__(roomId);
-    //
-    // Return all userIds if no `text`
-    // if (!text) {
-    //   return userIds;
-    // }
-    //
-    // Otherwise, filter userIds for the search `text` and return
-    // return userIds.filter((userId) =>
-    //   userId.toLowerCase().includes(text.toLowerCase())
-    // );
-
-    return [];
-  },
 });
