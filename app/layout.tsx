@@ -1,33 +1,30 @@
-import type { Metadata } from "next";
-import { Room } from "./Room";
 import { Work_Sans } from "next/font/google";
+
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+import Room from "./Room";
+
+export const metadata = {
+  title: "Figma Clone",
+  description:
+    "A minimalist Figma clone using fabric.js and Liveblocks for realtime collaboration",
+};
 
 const workSans = Work_Sans({
   subsets: ["latin"],
   variable: "--font-work-sans",
-  weight: ["400","600", "700"],
-
+  weight: ["400", "600", "700"],
 });
 
-export const metadata: Metadata = {
-  title: "Figma Clone | Ruchika Kadam",
-  description:
-    "Figma clone using Fabric.js, Next.js, Liveblocks, TailwindCSS to work in real-time",
-};
+const RootLayout = ({ children }: { children: React.ReactNode }) => (
+  <html lang='en'>
+    <body className={`${workSans.className} bg-primary-grey-200`}>
+      <Room>
+        <TooltipProvider>{children}</TooltipProvider>
+      </Room>
+    </body>
+  </html>
+);
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body className={`${workSans.className} bg-primary-grey-200`}>
-        <Room>
-          {children}
-        </Room>
-        </body>
-    </html>
-  );
-}
+export default RootLayout;

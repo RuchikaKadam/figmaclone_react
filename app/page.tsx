@@ -1,19 +1,10 @@
-"use client";
+import dynamic from "next/dynamic";
 
-import LeftSideBar from "@/components/LeftSideBar";
-import Live from "@/components/Live";
-import Navbar from "@/components/Navbar";
-import RightSideBar from "@/components/RightSideBar";
+/**
+ * disable ssr to avoid pre-rendering issues of Next.js
+ *
+ * we're doing this because we're using a canvas element that can't be pre-rendered by Next.js on the server
+ */
+const App = dynamic(() => import("./App"), { ssr: false });
 
-export default function Page() {
-  return ( 
-    <main className="h-screen overflow-hidden">
-      <Navbar />
-      <section className="flex h-full flex-row"></section>
-      <LeftSideBar />
-      <Live />
-      <RightSideBar />
-    </main>
-    
-  );
-}
+export default App;
